@@ -1,0 +1,10 @@
+ett
+två
+tre
+fyra
+fem
+sex
+sju
+åtta
+nio
+tio
