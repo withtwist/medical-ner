@@ -1,0 +1,117 @@
+#  Beata B. Megyesi
+#  bea@stp.lingfil.uu.se
+
+
+The parser is based on a context-free grammar for Swedish and an Earley parser implemented in python by John Aycock (SPARK-0.6.1).
+
+Warning! The parser is UNDER DEVELOPMENT!
+Please send comments to bea@stp.lingfil.uu.se
+
+Files included:
+README (not yet complete documentation)
+run_parse.py (run the parser with Swedish grammar)
+parse.py (the grammar for Swedish, written by Beata Megyesi and Olav Bandmann)
+spark.py (Earley parser implemented by Aycock in python)
+sparkgen.py (parser rule reading written by Olav Bandmann)
+fixdot.py (read lines)
+tokenastdot.py (for printing tree representation, written by Olav Bandmann)
+isofonts.ps (enables dot-generated PostScript files to use isolatin fonts)
+example.ps (example on a tree structure representation)
+
+
+To be able to run the parser you have to use python 2.1.1 or a later version. First, edit the python path in run_parse.py to the correct one. 
+(To find out the path to python, type 
+$ which python)
+
+
+Go to the parser directory and run the parser by typing:
+$run_parse.py <option> <first line no> <number of lines> <infile> <outfile>
+
+where <option> is one of
+	-t (tagged representation),
+	-p (parenthesis representation),
+	-i (indented representation),
+	-d (tree representation as a postscript (.ps) file; works for one sentence at a time only. This switch requires installed graphviz developed at AT&T. 
+
+
+<first line no> is the no of the line you want to parse from
+
+<number of lines> is the total no of lines you wish to parse
+
+<infile> the name of the file that you wish to parse
+The infile has to be tokenized, one sentence per line, and the words have to be
+annotated with PAROLE tags. The word and the tag has to be separated by '/',
+see example below:
+
+Smygrustning/NCUSN@IS av/SPS raketvapen/NCNPN@IS 
+Av/SPS MATS/NP00N@0S LUNDEGÅRD/NP00N@0S DN:s/NP00G@0S korrespondent/NCUSN@IS ./FE 
+LONDON/NP00N@0S ./FE 
+Avspänningen/NCUSN@DS mellan/SPS stormaktsblocken/NCNPN@DS och/CCS nedrustningssträvanden/NCNPN@IS i/SPS Europa/NP00N@0S har/V@IPAS inte/RG0S mycket/AQPNSNIS motsvarighet/NCUSN@IS i/SPS Mellanöstern/NP00N@0S ./FE 
+Gamla/AQP0SNDS testamentet/NCNSN@DS kan/V@IPAS fortfarande/RG0S ge/V@N0AS en/DI@US@S anvisning/NCUSN@IS om/SPS bitterheten/NCUSN@DS i/SPS konflikterna/NCUPN@DS i/SPS området/NCNSN@DS -/FI och/CCS om/SPS tidsperspektivet/NCNSN@DS ./FE 
+Don/NP00N@0S Kerr/NP00N@0S ,/FI en/PI@US0@S av/SPS de/DF@0P@S politiska/AQP0PN0S tänkarna/NCUPN@DS på/SPS det/DF@NS@S ansedda/AF00SNDS analysinstitutet/NCNSN@DS IISS/NP00N@0S ,/FI är/V@IPAS inte/RG0S påfallande/RG0S optimistisk/AQPUSNIS när/RH0S han/PF@USS@S talar/V@IPAS om/SPS saken/NCUSN@DS ./FE 
+Särskilt/RG0S smygrustningen/NCUSN@DS vad/RH0S gäller/V@IPAS missiler/NCUPN@IS oroar/V@IPAS ./FE 
+Avspänning/NCUSN@IS och/CCS töväder/NCNSN@IS gäller/V@IPAS allt/RG0S oftare/RGCS också/RG0S i/SPS regioner/NCUPN@IS där/RH0S motsättningarna/NCUPN@DS tidigare/RGCS synts/V@IUSS fullkomligt/RGPS olösliga/AQP0PN0S ./FE 
+Hur/RH0S är/V@IPAS det/PF@NS0@S då/RG0S i/SPS Mellanöstern/NP00N@0S ?/FE 
+-/FI Jag/PF@USS@S kan/V@IPAS tänka/V@N0AS mig/PF@USO@S att/CSS en/DI@US@S massa/NCUSN@IS bedömare/NCUPN@IS -/FI och/CCS politiska/AQP0PN0S aktörer/NCUPN@IS -/FI i/SPS regionen/NCUSN@DS iakttar/V@IPAS vad/PH@NS0@S som/PH@000@S händer/V@IPAS på/SPS andra/AQP0PN0S håll/NCNPN@IS i/SPS världen/NCUSN@DS med/SPS stort/AQPNSNIS intresse/NCNSN@IS ,/FI säger/V@IPAS Don/NP00N@0S Kerr/NP00N@0S ./FE 
+
+
+
+<outfile> the name of the outfile
+Example of the parsed input in parenthesis format:
+
+[NPMAX* [NP* Smygrustning/NCUSN@IS *NP] [PP* av/SPS [NP* raketvapen/NCNPN@IS *NP] *PP] *NPMAX]
+[PP* Av/SPS [NP* MATS/NP00N@0S LUNDEGÅRD/NP00N@0S *NP] *PP] [NP* DN:s/NP00G@0S korrespondent/NCUSN@IS *NP] ./FE
+[NP* LONDON/NP00N@0S *NP] ./FE
+[NPMAX* [NP* Avspänningen/NCUSN@DS *NP] [PP* mellan/SPS [NP* stormaktsblocken/NCNPN@DS *NP] och/CCS [NP* nedrustningssträvanden/NCNPN@IS *NP] *PP] [PP* i/SPS [NP* Europa/NP00N@0S *NP] *PP] *NPMAX] [VC* har/V@IPAS *VC] inte/RG0S [NPMAX* [NP* [APMIN* mycket/AQPNSNIS *APMIN] motsvarighet/NCUSN@IS *NP] [PP* i/SPS [NP* Mellanöstern/NP00N@0S *NP] *PP] *NPMAX] ./FE
+[NP* [APMIN* Gamla/AQP0SNDS *APMIN] testamentet/NCNSN@DS *NP] [VC* kan/V@IPAS *VC] [ADVP* fortfarande/RG0S *ADVP] [VC* ge/V@N0AS *VC] [NPMAX* [NP* en/DI@US@S *NP] [NP* anvisning/NCUSN@IS *NP] [PP* om/SPS [NP* bitterheten/NCUSN@DS *NP] *PP] [PP* i/SPS [NP* konflikterna/NCUPN@DS *NP] *PP] [PP* i/SPS [NP* området/NCNSN@DS *NP] *PP] *NPMAX] -/FI och/CCS [PP* om/SPS [NP* tidsperspektivet/NCNSN@DS *NP] *PP] ./FE
+[NP* Don/NP00N@0S Kerr/NP00N@0S *NP] ,/FI [NPMAX* [NP* en/PI@US0@S *NP] [PP* av/SPS [NP* de/DF@0P@S [APMIN* politiska/AQP0PN0S *APMIN] tänkarna/NCUPN@DS *NP] *PP] [PP* på/SPS [NP* det/DF@NS@S [APMIN* ansedda/AF00SNDS *APMIN] analysinstitutet/NCNSN@DS *NP] *PP] *NPMAX] [NP* IISS/NP00N@0S *NP] ,/FI [VC* är/V@IPAS *VC] inte/RG0S [APMIN* [ADVP* påfallande/RG0S *ADVP] optimistisk/AQPUSNIS *APMIN] när/RH0S [NP* han/PF@USS@S *NP] [VC* talar/V@IPAS *VC] [PP* om/SPS [NP* saken/NCUSN@DS *NP] *PP] ./FE
+[ADVP* Särskilt/RG0S *ADVP] [NP* smygrustningen/NCUSN@DS *NP] vad/RH0S [VC* gäller/V@IPAS *VC] [NP* missiler/NCUPN@IS *NP] [VC* oroar/V@IPAS *VC] ./FE
+[NP* Avspänning/NCUSN@IS *NP] och/CCS [NP* töväder/NCNSN@IS *NP] [VC* gäller/V@IPAS *VC] [ADVP* allt/RG0S *ADVP] [ADVP* oftare/RGCS *ADVP] också/RG0S [PP* i/SPS [NP* regioner/NCUPN@IS *NP] *PP] [ADVP* där/RH0S *ADVP] [NP* motsättningarna/NCUPN@DS *NP] [ADVP* tidigare/RGCS *ADVP] [VC* synts/V@IUSS *VC] [APMIN* [ADVP* fullkomligt/RGPS *ADVP] olösliga/AQP0PN0S *APMIN] ./FE
+Hur/RH0S [VC* är/V@IPAS *VC] [NP* det/PF@NS0@S *NP] [ADVP* då/RG0S *ADVP] [PP* i/SPS [NP* Mellanöstern/NP00N@0S *NP] *PP] ?/FE
+-/FI [NP* Jag/PF@USS@S *NP] [VC* kan/V@IPAS tänka/V@N0AS *VC] [NP* mig/PF@USO@S *NP] att/CSS [NP* en/DI@US@S massa/NCUSN@IS bedömare/NCUPN@IS *NP] -/FI och/CCS [NP* [APMIN* politiska/AQP0PN0S *APMIN] aktörer/NCUPN@IS *NP] -/FI [PP* i/SPS [NP* regionen/NCUSN@DS *NP] *PP] [VC* iakttar/V@IPAS *VC] [NP* vad/PH@NS0@S *NP] [NP* som/PH@000@S *NP] [VC* händer/V@IPAS *VC] [PP* på/SPS [NPMAX* [NP* [APMIN* andra/AQP0PN0S *APMIN] håll/NCNPN@IS *NP] [PP* i/SPS [NP* världen/NCUSN@DS *NP] *PP] [PP* med/SPS [NP* [APMIN* stort/AQPNSNIS *APMIN] intresse/NCNSN@IS *NP] *PP] *NPMAX] *PP] ,/FI [VC* säger/V@IPAS *VC] [NP* Don/NP00N@0S Kerr/NP00N@0S *NP] ./FE
+
+For example, if you want to parse the first ten lines of the file INFILE and
+wish to have the OUTPUT in indented format in the OUTFILE, type the fóllowing:
+$run_parse.py -i 1 10 INFILE OUTFILE
+
+Categories used to parse texts, i.e. the syntactic classes
+
+To be able to represent the whole hierarchical phrase structure, eight types of phrases are used. Some of categories correspond to chunks, e.g.  AP, ADVP, and verb clusters. Other categories are designed to be able to handle arguments on the right hand side of the phrasal head, or to handle co-ordinated phrases, such as maximal adjective phrases. The phrase categories are listed below, each followed by a brief explanation and an example.
+
+Adverb Phrase (AdvP) consists of adverbs that can modify adjectives, numerical
+expressions or verbs. e.g. very   
+
+Minimal Adjective Phrase (APMIN) constitutes the adjectival head and its
+possible modifiers, e.g. AdvP and/or prepositional phrase. e.g. very
+interesting 
+
+Maximal Adjective Phrase (APMAX) includes more than one AP with a delimiter
+or a conjunction in between.e.g. very interesting and nice  
+
+Noun Phrase (NP) may include the head noun and its modifiers to the left,
+e.g. determiners, nouns in genitive, possessive pronouns, numerical
+expressions, APMIN, APMAX, and/or compound nouns. Thus, possessive
+expressions do not split an NP into two noun phrases like in the
+CoNLL-2000 shared task on chunking. e.g. Pilger's very interesting and nice
+book   
+
+Prepositional Phrase (PP) consists of one or several prepositions delimited by a conjunction and one or several NPs, or in
+elliptical expressions an AP only. e.g. about politics    
+
+Verb Cluster (VC) consists of a continuous verb group belonging to
+the same verb phrase without any intervening constituents like NP or
+AdvP. e.g. would have been 
+
+Infinitive Phrase (InfP) includes an infinite verb together with the infinite
+particle and may contain AdvP and/or verbal particles. e.g. to go out
+ 
+Numeral Expression (SIFFERP) consists of numerals with their possible
+modifiers, for example AP or AdvP. e.g. several thousands 
+
+Please note, that the grammatical categories do not represent neither clauses, such as relative clauses, nor sentences. These structures are planned to be analyzed in a later stage. 
+Also, there is another version of the parser which includes detection of maximal projection of noun phrases including relative clauses. If you are intrested, please, contact bea@stp.lingfil.uu.se.
+
+
+
+
+
