@@ -2,7 +2,7 @@
 How to get the model running:
 
 1. Open terminal
-2. Navigate to 'med-ner/rnn-model'
+2. Navigate to 'medical-ner/rnn-ner'
 3. run python ml_corpus_annotator.py \<path_to_input_text\> \<path_to_seed_directory\>
 
     Where 
